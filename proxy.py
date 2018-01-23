@@ -41,9 +41,7 @@ def intercept_quiz(req, rsp):
     q = question.strip() + "|" + "|".join(sorted(options))
     row = db.execute("SELECT answer FROM quiz WHERE q == ?", [q]).fetchone()
     if row:
-        ans_idx = options.index(row[0])
-        ctx.log("正确答案为 %d" % (ans_idx + 1))
-        options[ans_idx] += "[正确答案]"
+        r['data']['quiz'] = "{}[{}]".format(question, 1+options.index(row[0]))
     else:
         # 暂存问题
         key = question_key(req.content)
